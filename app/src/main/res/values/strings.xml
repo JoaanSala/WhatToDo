@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">WhatToDo</string>
+
+    <string name="Registrar"><u>Registra\'t</u></string>
+    <string name="Forgot_Pwd"><u>¿T\'has oblidat de la contrasenya?</u></string>
+    <string name="Back_LogIn"><u>INICIAR SESSIÓ</u></string>
+    <string name="title_activity_google_maps">Map</string>
+    <string name="title_activity_items_event">Map</string>
+    <string name="title_activity_item_event">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+</resources>

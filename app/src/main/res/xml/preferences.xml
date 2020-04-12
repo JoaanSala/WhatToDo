@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Enable SuperUsuari">
+        <CheckBoxPreference
+            android:key="enableSuperuser"
+            android:title="Habilitar"
+            android:summary="Habilita el mode superusuari per poder accedir a l'aplicació"
+            android:defaultValue="false"
+            android:checked="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Dades del Perfil">
+        <CheckBoxPreference
+            android:key="enableEmail"
+            android:title="Mostrar el correu Electrònic"
+            android:defaultValue="true"
+            android:checked="true"/>
+        <CheckBoxPreference
+            android:key="enableDate"
+            android:title="Mostrar data de naixement"
+            android:defaultValue="true"
+            android:checked="true"/>
+        <CheckBoxPreference
+            android:key="enableCiutat"
+            android:title="Mostrar la ciutat"
+            android:defaultValue="true"
+            android:checked="true"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="">
+        <Preference android:key="disableSession"
+            android:title="Tanca la Sessió"
+            android:enabled="true"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

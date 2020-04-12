@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFCE1C"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#000000">
+
+            <ImageView
+                android:id="@+id/coment_back_arrow"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/back_yellow_arrow"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:clickable="true"/>
+
+            <TextView
+                android:id="@+id/titol_ressenya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/carter_one"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="COMENTARI"
+                android:textColor="#FFCE1C"
+                android:textStyle="bold"
+                android:textSize="35dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Títol"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"/>
+
+        <EditText
+            android:id="@+id/com_comentari"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/input_yellow"
+            android:maxLength="40"
+            android:hint="Afegeix un títol al teu comentari..."
+            android:textColorHint="#656565"
+            android:textColor="#000000"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Valoració"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/estrella1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/estrella_u"
+                android:layout_marginRight="15dp"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/estrella2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/estrella_u"
+                android:layout_marginRight="15dp"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/estrella3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/estrella_u"
+                android:layout_marginRight="15dp"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/estrella4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/estrella_u"
+                android:layout_marginRight="15dp"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/estrella5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/estrella_u"
+                android:clickable="true"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/publica_comentari"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:background="@drawable/btn_home"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:text="PUBLICA"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="#FFCE1C"/>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
