@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.whattodo.MainActivity;
 import com.example.whattodo.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class PreferencesFragment extends PreferenceFragment {
 
@@ -20,6 +21,7 @@ public class PreferencesFragment extends PreferenceFragment {
         Preference myPref = (Preference) findPreference("disableSession");
         myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
+                FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getActivity(), MainActivity.class));
                 return true;
             }

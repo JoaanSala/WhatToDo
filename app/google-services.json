@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "280303484039",
+    "firebase_url": "https://ambient-antenna-273215.firebaseio.com",
+    "project_id": "ambient-antenna-273215",
+    "storage_bucket": "ambient-antenna-273215.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280303484039:android:1f938eb608eb8836a84c22",
+        "android_client_info": {
+          "package_name": "com.example.whattodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280303484039-acgljg1qo10nri4ifen4rsjrrdkd3p9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.whattodo",
+            "certificate_hash": "640384c5641d300215c79a18f56b32360628fac4"
+          }
+        },
+        {
+          "client_id": "280303484039-f1l465k67mlleb6o3rf5fn09lpmub4ef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcGVaF-94YyLjhAc7UAp8zuyc1yEWbj48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280303484039-f1l465k67mlleb6o3rf5fn09lpmub4ef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
