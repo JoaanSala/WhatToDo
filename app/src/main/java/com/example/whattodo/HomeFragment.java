@@ -56,6 +56,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.Normalizer;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -87,19 +88,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private String mLastUpdateTimeLabel;
     private String mLastUpdateTime;
 
-
     Button getLocation;
     CardView restaurants, monuments, oci, nocturn;
     View mView;
     TextView city_location;
     double latitude, longitude;
-
+    MainActivity ma;
 
 
     @Nullable
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        ma = (MainActivity)getActivity();
 
         restaurants = mView.findViewById(R.id.cardivew_r);
         monuments = mView.findViewById(R.id.cardivew_m);
@@ -169,6 +171,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         } else if (!checkPermissions()) {
             requestPermissions();
         }
+        if(ma.getLocationActivated() && !city_location.getText().equals(ma.getLocation())){
+            city_location.setText(ma.getLocation());
+        }
 
         updateLocationUI();
     }
@@ -204,9 +209,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     mRequestingLocationUpdates = true;
                     startLocationUpdates();
                 }
+                ma.setLocationActivated(true);
                 break;
         }
     }
+
+
 
     public void goEventFragment(Fragment selectedFragment, Bundle bundle){
         selectedFragment = new EventFragment();
@@ -287,7 +295,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 List<Address> addresses = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
                 Address obj = addresses.get(0);
                 String add = obj.getLocality();
-                city_location.setText(add);
+                takeOfAccents(add);
             }catch (IOException e){
                 e.printStackTrace();
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -379,5 +387,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         savedInstanceState.putParcelable(KEY_LOCATION, mCurrentLocation);
         savedInstanceState.putString(KEY_LAST_UPDATED_TIME_STRING, mLastUpdateTime);
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void takeOfAccents(String text){
+        String string = Normalizer.normalize(text, Normalizer.Form.NFD);
+        string = string.replaceAll("[^\\p{ASCII}]", "");
+        if(!string.equals(ma.getLocation())){
+            city_location.setText(string);
+            ma.setLocation(string);
+            ma.sendOnMainChannel(mView);
+        }
+        stopLocationUpdates();
     }
 }

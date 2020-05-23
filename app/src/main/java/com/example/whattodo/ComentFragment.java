@@ -1,5 +1,7 @@
 package com.example.whattodo;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -10,8 +12,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import java.util.Map;
+import com.example.whattodo.model.Coment;
+import com.example.whattodo.model.Event;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.Transaction;
+
+import org.w3c.dom.Document;
+
+import java.util.concurrent.Executor;
 
 public class ComentFragment extends Fragment implements View.OnClickListener {
 
@@ -19,11 +37,12 @@ public class ComentFragment extends Fragment implements View.OnClickListener {
     int estrellaValue = 0;
     Button mPublica;
     EditText mComentari;
-    EntryComent_DB coment_db;
     View mView;
-    Bundle bundle;
-    EntryObject entryObject;
-    String message;
+
+    FirebaseAuth mAuth;
+    FirebaseFirestore mStore;
+    String documentID, userID;
+    String userName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +60,11 @@ public class ComentFragment extends Fragment implements View.OnClickListener {
         mEstrella4.setOnClickListener(this);
         mEstrella5.setOnClickListener(this);
 
+        mAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+
+        documentID = getActivity().getIntent().getExtras().getString("DOCUMENT_KEY");
 
         mComentari = mView.findViewById(R.id.com_comentari);
         mPublica = mView.findViewById(R.id.publica_comentari);
@@ -98,9 +122,20 @@ public class ComentFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.publica_comentari:
-                /*EntryComent_DB entryComentDb = new EntryComent_DB();
-                String comentari = mComentari.getText().toString();
-                entryComentDb.addNewComent("Pere", comentari, estrellaValue);*/
+
+                //getUserLetter();
+                DocumentReference documentReference = mStore.collection("users").document(userID);
+                documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                        String userName = snapshot.getString("name");
+                        String userSurname = snapshot.getString("surname");
+                        String letter = Character.toString(userName.charAt(0))+Character.toString(userSurname.charAt(0));
+                        DocumentReference event = mStore.collection("entryObject_DB").document(documentID);
+                        Coment coment = new Coment(letter, mComentari.getText().toString(),estrellaValue);
+                        addRating(event, coment);
+                    }
+                });
                 getActivity().finish();
                 break;
 
@@ -108,5 +143,21 @@ public class ComentFragment extends Fragment implements View.OnClickListener {
                 getActivity().finish();
                 break;
         }
+    }
+
+    private Task<Void> addRating(final DocumentReference eventRef, final Coment coment) {
+
+        final DocumentReference comentRef = eventRef.collection("coment")
+                .document();
+
+        return mStore.runTransaction(new Transaction.Function<Void>() {
+            @Nullable
+            @Override
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                transaction.set(comentRef, coment);
+                return null;
+            }
+        });
+
     }
 }

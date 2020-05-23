@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,45 +14,36 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.whattodo.adapter.EventAdapter;
+import com.example.whattodo.model.Event;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 public class EventFragment extends Fragment{
 
-    public EntryObject_DB database = new EntryObject_DB();
     private RecyclerView mRecyclerView;
-    private EntryObjectAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    public ArrayList<EntryObject> searchList;
     View mView;
     String message;
+
+    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    private CollectionReference eventRef = mFirestore.collection("entryObject_DB");
+
+    private EventAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_event, container, false);
 
         Bundle bundle = getArguments();
-
         message = bundle.getString("Type_Event");
 
         TextView titol = mView.findViewById(R.id.textEvent);
         titol.setText(message);
-        database.createDataBase();
 
-        if(message.equals("Restaurants")){
-            database.addRestaurantsToDataBase();
-        }
-        else if(message.equals("Llocs d'Interès")){
-            database.addMonumentsToDataBase();
-        }
-        else if(message.equals("Oci")){
-            database.addOciToDataBase();
-        }
-        else if(message.equals("Nocturn")){
-            database.addNightToDataBase();
-        }
-
-        searchList = database.getDataBase();
-        buildRecyclerView();
+        initRecyclerView();
 
         ImageView back = mView.findViewById(R.id.arrow_back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -64,27 +56,38 @@ public class EventFragment extends Fragment{
         return mView;
     }
 
+    private void initRecyclerView() {
+        Query query = eventRef.whereEqualTo("TypeID", message);
 
-    public void buildRecyclerView(){
+        FirestoreRecyclerOptions<Event> options = new FirestoreRecyclerOptions.Builder<Event>().setQuery(query, Event.class).build();
+
+        adapter = new EventAdapter(options);
+
         mRecyclerView = mView.findViewById(R.id.recycler_view_events);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new EntryObjectAdapter((searchList));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(adapter);
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mAdapter.setOnItemClickListener(new EntryObjectAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new EventAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
-                Fragment selectedFragment = new ItemEvent_Fragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Entry_Object", searchList.get(position));
-                bundle.putString("Previous_Layout", message);
-                selectedFragment.setArguments(bundle);
-
-                getFragmentManager().beginTransaction().replace(R.id.fragment_main, selectedFragment).commit();
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                String documentId = documentSnapshot.getId();
+                Intent intent = new Intent(getContext(), ItemEvent_Activity.class);
+                intent.putExtra("DOCUMENT_KEY", documentId);
+                startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

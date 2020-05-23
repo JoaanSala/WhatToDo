@@ -12,9 +12,9 @@
         android:title="Search"/>
 
     <item
-        android:id="@+id/nav_history"
-        android:icon="@drawable/selector_history"
-        android:title="History"/>
+        android:id="@+id/nav_sale"
+        android:icon="@drawable/selector_sale"
+        android:title="Ofertes"/>
 
     <item
         android:id="@+id/nav_profile"

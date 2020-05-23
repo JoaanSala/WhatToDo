@@ -10,41 +10,60 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.example.whattodo.model.Event;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ItemEvent_Fragment extends Fragment implements View.OnClickListener{
 
-    RelativeLayout background_restaurant;
+    ImageView image_background;
     TextView b_close, tv_title_event, tv_localitzacio;
     String titol, localitzacio;
     Button b_info, b_comentari;
-    FragmentManager manager;
     FragmentTransaction transaction;
-
     View mView;
-    Bundle bundle;
-    EntryObject entryObject;
-    String message;
 
+    DocumentReference eventItem;
+    FirebaseFirestore mFirestore;
+    Event event;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_eventitem, container, false);
 
-        int imatgeRestaurant = entryObject.getmImageResource();
-        titol = entryObject.getTitol();
-        localitzacio = entryObject.getLocalitzacio();
+        mFirestore = FirebaseFirestore.getInstance();
 
-
-        background_restaurant = mView.findViewById(R.id.restaurant_background);
+        image_background = mView.findViewById(R.id.image_eventItem);
         tv_title_event = mView.findViewById(R.id.title_event);
         tv_localitzacio = mView.findViewById(R.id.localitzacio);
 
-        background_restaurant.setBackgroundResource(imatgeRestaurant);
-        tv_title_event.setText(titol);
-        tv_localitzacio.setText(localitzacio);
+        String documentID = getActivity().getIntent().getExtras().getString("DOCUMENT_KEY");
 
+        eventItem = mFirestore.collection("entryObject_DB").document(documentID);
+
+        eventItem.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                event = documentSnapshot.toObject(Event.class);
+
+                Glide.with(image_background.getContext())
+                        .load(event.getURL())
+                        .centerCrop()
+                        .into(image_background);
+
+                titol = event.getTitol();
+                localitzacio = event.getLocalitzacio();
+
+                tv_title_event.setText(titol);
+                tv_localitzacio.setText(localitzacio);
+            }
+        });
 
         b_close = mView.findViewById(R.id.close_activity);
         b_close.setOnClickListener(this);
@@ -58,37 +77,11 @@ public class ItemEvent_Fragment extends Fragment implements View.OnClickListener
         return mView;
     }
 
-    public EntryObject getEntryObject(){
-
-        bundle = getArguments();
-        entryObject = bundle.getParcelable("Entry_Object");
-        message = bundle.getString("Previous_Layout");
-        return entryObject;
-    }
-
-    public void changetoComent(){
-        Bundle bundlecoment = new Bundle();
-        bundlecoment.putParcelable("ItemEvent_EntryObjectPrevious", entryObject);
-        bundlecoment.putString("ItemEvent_LayoutPrevious", message);
-        ComentFragment fragment = new ComentFragment();
-        fragment.setArguments(bundlecoment);
-        getFragmentManager().beginTransaction().replace(R.id.fragment_main, fragment).commit();
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.close_activity:
-                if(message.equals("search")){
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_main, new SearchFragment()).commit();
-                }else{
-                    Fragment selectedFragment = null;
-                    Bundle newBundle = new Bundle();
-                    newBundle.putString("Type_Event", message);
-                    selectedFragment = new EventFragment();
-                    selectedFragment.setArguments(newBundle);
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_main, selectedFragment).commit();
-                }
+                getActivity().onBackPressed();
                 break;
 
             case R.id.b_info:
@@ -97,16 +90,7 @@ public class ItemEvent_Fragment extends Fragment implements View.OnClickListener
                 b_info.setBackgroundResource(R.drawable.btn_fragment_c);
                 b_info.setTextColor(Color.WHITE);
 
-                ItemEvent_InfoFragment itemEventInfoFragment = new ItemEvent_InfoFragment();
-                manager = getFragmentManager();
-                bundle = new Bundle();
-                bundle.putParcelable("Item_Object", entryObject);
-                bundle.putString("Previous_Layout", message);
-                itemEventInfoFragment.setArguments(bundle);
-                transaction = manager.beginTransaction();
-                transaction.replace(R.id.fragment_event, itemEventInfoFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_event, new ItemEvent_InfoFragment()).commit();
                 break;
             case R.id.b_comentari:
                 b_comentari.setBackgroundResource(R.drawable.btn_fragment_c);
@@ -114,16 +98,10 @@ public class ItemEvent_Fragment extends Fragment implements View.OnClickListener
                 b_info.setBackgroundResource(R.drawable.btn_fragment_u);
                 b_info.setTextColor(Color.BLACK);
 
-                ItemEvent_ComentFragment itemEventComentFragment = new ItemEvent_ComentFragment();
-                manager = getFragmentManager();
-                transaction = manager.beginTransaction();
-
-                transaction.replace(R.id.fragment_event, itemEventComentFragment);
-                transaction.addToBackStack(null);
+                transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_event, new ItemEvent_ComentFragment(), "");
                 transaction.commit();
                 break;
-
         }
     }
-
 }

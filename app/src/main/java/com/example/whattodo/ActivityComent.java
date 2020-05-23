@@ -13,9 +13,7 @@ public class ActivityComent extends AppCompatActivity {
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coment);
-
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_coment, new ComentFragment()).commit();
-
 
     }
 }

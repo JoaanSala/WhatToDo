@@ -10,6 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.example.whattodo.adapter.ComentAdapter;
+import com.example.whattodo.adapter.EventAdapter;
+import com.example.whattodo.model.Coment;
+import com.example.whattodo.model.Event;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.auto.value.AutoAnnotation;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
@@ -18,41 +30,51 @@ public class ItemEvent_ComentFragment extends Fragment {
 
     View mView;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    public ArrayList<EntryComent> searchList;
-    public EntryComent_DB database = new EntryComent_DB();
+    private ComentAdapter adapter;
+    private FirebaseFirestore mFirestore;
+    DocumentReference eventRef;
+    String documentID;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_eventitem_coment, container, false);
 
-        Log.i("ComentFragment", "Estic a ComentFragment");
+        documentID = getActivity().getIntent().getExtras().getString("DOCUMENT_KEY");
+        mFirestore = FirebaseFirestore.getInstance();
+        eventRef = mFirestore.collection("entryObject_DB").document(documentID);
 
-        database.createDB();
-        database.addComentExamples();
-        searchList = database.getEntryComentDB();
-        buildRecyclerView();
+        Query query = eventRef
+                .collection("coment")
+                .limit(10);
+
+        initRecyclerView(query);
 
         return mView;
     }
 
-    public void buildRecyclerView(){
+    private void initRecyclerView(Query query) {
+
+        FirestoreRecyclerOptions<Coment> options = new FirestoreRecyclerOptions.Builder<Coment>().setQuery(query, Coment.class).build();
+
+        adapter = new ComentAdapter(options);
+
         mRecyclerView = mView.findViewById(R.id.coment_recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new EntryComentAdapter(searchList);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(adapter);
+    }
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
 
