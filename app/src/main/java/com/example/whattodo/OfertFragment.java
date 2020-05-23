@@ -45,6 +45,7 @@ public class OfertFragment extends Fragment{
     FirebaseAuth mAuth;
     String userID;
     MainActivity ma;
+    int count = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -119,14 +120,17 @@ public class OfertFragment extends Fragment{
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        int count = 0;
                         if(task.isSuccessful()){
-                            int count = 0;
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 Log.d("Copyin documents", document.getId() + " => " + document.getData());
                                 count++;
                             }
+                            if(count==0) {
+                                text_NOLocation.setVisibility(View.VISIBLE);
+                                text_NOLocation.setText("HO SENTIM, PERO EN AQUESTA LOCALITZACIÓ NO TENIM OFERTES EN AQUESTS MOMENTS...");
+                            }
                             Log.d("How many Oferts", String.valueOf(count));
-
                         }
                     }
                 });

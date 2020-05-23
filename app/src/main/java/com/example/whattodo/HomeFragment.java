@@ -166,16 +166,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         super.onResume();
         // Within {@code onPause()}, we remove location updates. Here, we resume receiving
         // location updates if the user has requested them.
-        if (mRequestingLocationUpdates && checkPermissions()) {
-            startLocationUpdates();
-        } else if (!checkPermissions()) {
+
+        if (!checkPermissions()) {
             requestPermissions();
         }
         if(ma.getLocationActivated() && !city_location.getText().equals(ma.getLocation())){
             city_location.setText(ma.getLocation());
         }
 
-        updateLocationUI();
     }
 
     @Override
