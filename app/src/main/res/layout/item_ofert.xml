@@ -1,0 +1,130 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    android:layout_marginBottom="10dp"
+
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:id="@+id/relative_ofert_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E3E0E0">
+
+        <ImageView
+            android:id="@+id/image_ofert"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_degustacion"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/ofert_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="20% DESCOMPTE"
+            android:textSize="22dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:background="#6C000000"
+            android:gravity="center_horizontal|center_vertical"/>
+
+        <TextView
+            android:id="@+id/event_and_location"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Event, Localització"
+            android:textStyle="italic|bold"
+            android:textColor="#000000"
+            android:textSize="17dp"
+            android:layout_above="@+id/rl_ofertData"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:gravity="center_vertical"
+            android:background="#FFDD00"/>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_ofertData"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:background="#B1000000">
+
+            <TextView
+                android:id="@+id/text_caducitat"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_toStartOf="@id/button_adquirir"
+                android:layout_toLeftOf="@+id/button_adquirir"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="-"
+                android:textColor="#00F7FF"
+                android:textSize="19dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_duration"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/text_caducitat"
+                android:layout_toLeftOf="@+id/button_adquirir"
+                android:layout_toStartOf="@id/button_adquirir"
+                android:text="-"
+                android:textSize="16dp"
+                android:textColor="#FFFFFF"
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"/>
+
+            <RelativeLayout
+                android:id="@+id/oferta_adquirida"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="#B5B5B5"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/text_adquirit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ADQUIRIDA"
+                    android:textSize="20dp"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:gravity="center_horizontal"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@id/text_adquirit"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/tick"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/button_adquirir"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:backgroundTint="#FF0091"
+                android:text="ADQUIRIR GRATIS"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:visibility="visible"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
