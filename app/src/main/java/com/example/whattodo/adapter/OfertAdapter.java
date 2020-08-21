@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,8 +19,15 @@ import com.example.whattodo.R;
 import com.example.whattodo.model.Ofert;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,15 +83,32 @@ public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.O
             });
         }
 
-        public void bind(Ofert ofert) {
+        public void bind(final Ofert ofert, int position) {
             Glide.with(imageOfert.getContext())
                     .load(ofert.getPhoto())
                     .into(imageOfert);
 
-            if(ofert.getAdquirit()){
-                bt_getOfert.setVisibility(View.GONE);
-                ofertaAdquired.setVisibility(View.VISIBLE);
-            }
+            String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final DocumentReference ofertDocument = FirebaseFirestore.getInstance().collection("users").document(userID).collection("PaidOferts").document(getSnapshots().getSnapshot(position).getId());
+            Log.d("OFERTID", "This is the ofert Id: " + getSnapshots().getSnapshot(position).getId());
+            Log.d("USEROFERT_ID", "This is the user ofert id: "+ofertDocument.getId());
+
+
+            ofertDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                    if (snapshot.getBoolean("acquired") != null) {
+                        if (snapshot.getBoolean("acquired") == true) {
+                            bt_getOfert.setVisibility(View.GONE);
+                            ofertaAdquired.setVisibility(View.VISIBLE);
+                        } else {
+                            bt_getOfert.setVisibility(View.VISIBLE);
+                            ofertaAdquired.setVisibility(View.GONE);
+                            Log.d("OFERTID", "This ofert isn't adquire!");
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -95,7 +120,7 @@ public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.O
 
     @Override
     protected void onBindViewHolder(@NonNull OfertHolder ofertHolder, int i, @NonNull Ofert ofert) {
-        ofertHolder.bind(ofert);
+        ofertHolder.bind(ofert, i);
         ofertHolder.eventANDlocation.setText(ofert.getEvent()+", "+ ofert.getLocalitzacio());
         ofertHolder.title.setText(ofert.getTitle());
         ofertHolder.caducitat.setText("Oferta Vàlida fins "+ofert.getValidesa());
@@ -105,6 +130,6 @@ public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.O
         LocalDate futureDate = LocalDate.parse(getDate, sdf);
         LocalDate presentDate = LocalDate.now();
         Period period = Period.between(presentDate, futureDate);
-        ofertHolder.duration.setText("Finalitza en:  "+period.getMonths()+" Mesos - "+period.getDays()+" Dies");
+        ofertHolder.duration.setText("Finalitza en:  "+period.getMonths()+" Mesos -"+period.getDays()+" Dies");
     }
 }

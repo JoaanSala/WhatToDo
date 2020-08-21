@@ -31,6 +31,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
+import com.google.firestore.v1.WriteResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class OfertFragment extends Fragment{
 
@@ -57,7 +61,7 @@ public class OfertFragment extends Fragment{
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         mFirestore = FirebaseFirestore.getInstance();
-        ofertRef = mFirestore.collection("users");
+        ofertRef = mFirestore.collection("oferts");
 
         recyclerView_Ofert = mView.findViewById(R.id.recyclerview_oferts);
         recyclerView_Ofert.setHasFixedSize(true);
@@ -74,7 +78,7 @@ public class OfertFragment extends Fragment{
 
     private void initRecyclerView() {
         checkDocuments();
-        Query query = ofertRef.document(userID).collection("userOferts").whereEqualTo("localitzacio", ma.getLocation());
+        Query query = ofertRef.whereEqualTo("localitzacio", ma.getLocation());
 
         mOptions = new FirestoreRecyclerOptions.Builder<Ofert>().setQuery(query, Ofert.class).build();
 
@@ -87,35 +91,35 @@ public class OfertFragment extends Fragment{
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 String documentId = documentSnapshot.getId();
-                updateUserOfert(documentId);
+                updateUserOfert(documentId, documentSnapshot);
             }
         });
 
     }
 
-    private Task<Void> updateUserOfert(String documentId) {
+    private void updateUserOfert(final String documentId, DocumentSnapshot documentSnapshot) {
 
-        final DocumentReference ofertDocument = ofertRef.document(userID).collection("userOferts").document(documentId);
+        final DocumentReference ofertDocument = mFirestore.collection("users").document(userID).collection("PaidOferts").document(documentId);
 
-        return mFirestore.runTransaction(new Transaction.Function<Void>() {
+        String TitleOfert = documentSnapshot.get("title").toString();
+        String EventOfert = documentSnapshot.get("event").toString();
+        String LocalizationOfert = documentSnapshot.get("localitzacio").toString();
+
+        Map<String, Object> data = new HashMap<>();
+
+        data.put("info", TitleOfert+", "+EventOfert+", "+LocalizationOfert);
+        data.put("acquired", true);
+
+        ofertDocument.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public Void apply(Transaction transaction)
-                    throws FirebaseFirestoreException {
-
-                Ofert ofert = transaction.get(ofertDocument)
-                        .toObject(Ofert.class);
-
-                boolean adquirit = true;
-                ofert.setAdquirit(adquirit);
-
-                transaction.set(ofertDocument, ofert);
-                return null;
+            public void onSuccess(Void aVoid) {
+                Log.d("TAG", "onSuccess : ofert Added with Id "+documentId);
             }
         });
     }
 
     private void checkDocuments() {
-        ofertRef.document(userID).collection("userOferts").whereEqualTo("localitzacio", ma.getLocation())
+        ofertRef.whereEqualTo("localitzacio", ma.getLocation())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

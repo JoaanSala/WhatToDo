@@ -150,12 +150,12 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                             Log.d("TAG", "onSuccess : user Profile is created for "+userID);
                                         }
                                     });
-                                    fStore.collection("oferts")
+                                    fStore.collection("PaidOferts")
                                             .get()
                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                    if(task.isSuccessful()){
+                                                    /*if(task.isSuccessful()){
                                                         int count = 0;
                                                         for(QueryDocumentSnapshot document : task.getResult()){
                                                             Log.d("Copyin documents", document.getId() + " => " + document.getData());
@@ -164,7 +164,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                                         }
                                                         Log.d("How many Oferts", String.valueOf(count));
 
-                                                    }
+                                                    }*/
                                                 }
                                             });
 
@@ -182,7 +182,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private Task<Void> addOferts(final Ofert ofert) {
+    /*private Task<Void> addOferts(final Ofert ofert) {
 
         final DocumentReference ofertRef = userReference.collection("userOferts").document();
 
@@ -195,5 +195,5 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-    }
+    }*/
 }
