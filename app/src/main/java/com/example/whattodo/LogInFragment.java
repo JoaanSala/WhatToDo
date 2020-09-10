@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,14 +41,18 @@ public class LogInFragment extends Fragment implements View.OnClickListener{
     private FirebaseAuth mAuth;
     private FirebaseUser user;
 
+    Button btn_logIn, btn_signIn;
+    RelativeLayout loading_LogIn;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_login, container, false);
 
         mAuth = FirebaseAuth.getInstance();
 
-        Button btn_logIn = mView.findViewById(R.id.btn_logIn);
-        Button btn_signIn = mView.findViewById(R.id.btn_signIn);
+        btn_logIn = mView.findViewById(R.id.btn_logIn);
+        loading_LogIn = mView.findViewById(R.id.loading_logIn);
+        btn_signIn = mView.findViewById(R.id.btn_signIn);
 
         ImageView pref_login = mView.findViewById(R.id.pref_login);
         pref_login.setOnClickListener(this);
@@ -77,6 +82,8 @@ public class LogInFragment extends Fragment implements View.OnClickListener{
                 }else if(TextUtils.isEmpty(password)){
                     et_contrasenya.setError("Password is required");
                 }else {
+                    btn_logIn.setVisibility(View.GONE);
+                    loading_LogIn.setVisibility(View.VISIBLE);
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -89,6 +96,9 @@ public class LogInFragment extends Fragment implements View.OnClickListener{
                                             new HomeFragment()).commit();
                                 } else {
                                     //Enviem email de verificació
+                                    btn_logIn.setVisibility(View.VISIBLE);
+                                    loading_LogIn.setVisibility(View.GONE);
+
                                     FirebaseUser fUser = mAuth.getCurrentUser();
                                     fUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -105,6 +115,8 @@ public class LogInFragment extends Fragment implements View.OnClickListener{
                                 }
                             } else {
                                 Toast.makeText(getActivity(), "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                btn_logIn.setVisibility(View.VISIBLE);
+                                loading_LogIn.setVisibility(View.GONE);
                             }
                         }
                     });
@@ -156,5 +168,12 @@ public class LogInFragment extends Fragment implements View.OnClickListener{
                 startActivity(new Intent(getActivity(), PreferencesActivity.class));
                 break;
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        btn_logIn.setVisibility(View.VISIBLE);
+        loading_LogIn.setVisibility(View.GONE);
     }
 }
