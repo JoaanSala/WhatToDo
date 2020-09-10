@@ -7,6 +7,11 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
+import androidx.fragment.app.Fragment;
+
+import com.example.whattodo.ActivityCreditCard;
+import com.example.whattodo.CreditCardFragment;
+import com.example.whattodo.EventFragment;
 import com.example.whattodo.LoadingFragment;
 import com.example.whattodo.MainActivity;
 import com.example.whattodo.R;
@@ -14,20 +19,31 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class PreferencesFragment extends PreferenceFragment {
 
+    FirebaseAuth mAuth;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        Preference myPref = (Preference) findPreference("disableSession");
-        myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        /*
+        Preference prefsSession = (Preference) findPreference("disableSession");
+        prefsSession.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                MainActivity main = new MainActivity();
-                main.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_main, new LoadingFragment()).commit();
-                FirebaseAuth.getInstance().signOut();
+                mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
                 getActivity().finish();
                 return true;
             }
         });
+
+        Preference prefsCreditCard = (Preference) findPreference("creditcard");
+        prefsCreditCard.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                startActivity(new Intent(getActivity(), ActivityCreditCard.class));
+                return true;
+            }
+        });
+        */
     }
 }

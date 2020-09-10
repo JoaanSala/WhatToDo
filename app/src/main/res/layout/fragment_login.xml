@@ -95,18 +95,52 @@
             android:layout_marginRight="25dp"
             android:layout_marginBottom="30dp"
             android:text="@string/Forgot_Pwd"/>
-        <Button
-            android:id="@+id/btn_logIn"
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/btn_background"
-            android:text="Iniciar sessió"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:elevation="5dp"/>
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btn_logIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/btn_background"
+                android:text="Iniciar sessió"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:elevation="5dp"
+                android:visibility="visible"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btn_logingIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_background_shadow"
+                    android:clickable="false"/>
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/loading_1"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
@@ -122,16 +156,17 @@
                 android:textSize="16sp"
                 android:textColor="#000000"
                 />
+
             <Button
                 android:id="@+id/btn_signIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Registrar"
-                android:textSize="17dp"
-                android:background="@android:color/transparent"
                 android:layout_marginLeft="10dp"
+                android:background="@android:color/transparent"
+                android:text="@string/Registrar"
                 android:textColor="#000000"
-                android:textStyle="bold"/>
+                android:textSize="17dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

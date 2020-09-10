@@ -3,6 +3,7 @@ package com.example.whattodo;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,6 +37,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
     String userID;
+    Button logout;
+
+    DocumentReference documentReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +60,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         mStore = FirebaseFirestore.getInstance();
         userID = mAuth.getCurrentUser().getUid();
 
+        logout = mView.findViewById(R.id.butt_logout);
+        logout.setOnClickListener(this);
+
         setProfile();
 
         pref_profile = mView.findViewById(R.id.pref_profile);
@@ -64,19 +72,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     public void setProfile(){
-        DocumentReference documentReference = mStore.collection("users").document(userID);
+        documentReference = mStore.collection("users").document(userID);
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-            String userName = snapshot.getString("name");
-            String userSurname = snapshot.getString("surname");
-            name.setText((userName+" "+userSurname).toUpperCase());
-            email.setText(snapshot.getString("email"));
-            city.setText(snapshot.getString("city"));
-            date.setText(snapshot.getString("birthDate"));
+                if(documentReference != null) {
+                    String userName = snapshot.getString("name");
+                    String userSurname = snapshot.getString("surname");
+                    name.setText((userName + " " + userSurname).toUpperCase());
+                    email.setText(snapshot.getString("email"));
+                    city.setText(snapshot.getString("city"));
+                    date.setText(snapshot.getString("birthDate"));
 
-            String firstLetter = Character.toString(userName.charAt(0))+Character.toString(userSurname.charAt(0));
-            profileText.setText(firstLetter);
+                    String firstLetter = Character.toString(userName.charAt(0)) + Character.toString(userSurname.charAt(0));
+                    profileText.setText(firstLetter);
+                }
             }
         });
 
@@ -87,6 +97,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         switch (view.getId()) {
             case R.id.pref_profile:
                 startActivity(new Intent(getActivity(), PreferencesActivity.class));
+                break;
+            case R.id.butt_logout:
+                mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                startActivity(new Intent(getActivity(), MainActivity.class));
                 break;
         }
     }
@@ -118,4 +133,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        documentReference = null;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        documentReference = null;
+    }
+
+
 }

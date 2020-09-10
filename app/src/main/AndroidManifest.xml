@@ -6,7 +6,6 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -24,7 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".ItemEvent_Activity"></activity>
+        <activity android:name=".CreditCardFragment"/>
+        <activity android:name=".ItemEvent_Activity" />
         <activity android:name=".HomeFragment" />
         <activity android:name=".ComentFragment" />
         <activity
@@ -48,7 +48,7 @@
         <activity android:name=".LoadingFragment" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".ActivityComent" />
-
+        <activity android:name=".ActivityCreditCard"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -57,7 +57,7 @@
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="default_channel_id"/>
+            android:value="default_channel_id" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/bar_sale_c" />
