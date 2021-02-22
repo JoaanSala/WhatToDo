@@ -1,6 +1,6 @@
 package com.example.whattodo.adapter;
 
-import android.icu.util.LocaleData;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,28 +15,22 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.whattodo.PayCardDialogFragment;
 import com.example.whattodo.R;
 import com.example.whattodo.model.Ofert;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Transaction;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
+
 
 
 public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.OfertHolder> {
@@ -73,6 +67,7 @@ public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.O
             bt_getOfert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     int position = getAdapterPosition();
                     bt_getOfert.setVisibility(View.GONE);
                     ofertaAdquired.setVisibility(View.VISIBLE);
@@ -90,9 +85,6 @@ public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.O
 
             String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final DocumentReference ofertDocument = FirebaseFirestore.getInstance().collection("users").document(userID).collection("PaidOferts").document(getSnapshots().getSnapshot(position).getId());
-            Log.d("OFERTID", "This is the ofert Id: " + getSnapshots().getSnapshot(position).getId());
-            Log.d("USEROFERT_ID", "This is the user ofert id: "+ofertDocument.getId());
-
 
             ofertDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override

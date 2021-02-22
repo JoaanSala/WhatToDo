@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.whattodo.adapter.EventAdapter;
 import com.example.whattodo.adapter.OfertAdapter;
@@ -38,8 +39,11 @@ import java.util.Map;
 
 public class OfertFragment extends Fragment{
 
+    private static final String TAG = "OfertFragment";
+
     View mView;
     TextView text_NOLocation;
+    String dialogAnswer;
 
     private RecyclerView recyclerView_Ofert;
     FirestoreRecyclerOptions<Ofert> mOptions;
@@ -62,6 +66,7 @@ public class OfertFragment extends Fragment{
         userID = mAuth.getCurrentUser().getUid();
         mFirestore = FirebaseFirestore.getInstance();
         ofertRef = mFirestore.collection("oferts");
+        dialogAnswer = "";
 
         recyclerView_Ofert = mView.findViewById(R.id.recyclerview_oferts);
         recyclerView_Ofert.setHasFixedSize(true);
@@ -81,20 +86,32 @@ public class OfertFragment extends Fragment{
         Query query = ofertRef.whereEqualTo("localitzacio", ma.getLocation());
 
         mOptions = new FirestoreRecyclerOptions.Builder<Ofert>().setQuery(query, Ofert.class).build();
-
+        Log.d("OPTIONS", query.toString());
         mAdapter = new OfertAdapter(mOptions);
 
         recyclerView_Ofert.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView_Ofert.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new OfertAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                String documentId = documentSnapshot.getId();
-                updateUserOfert(documentId, documentSnapshot);
-            }
-        });
+        //if(userEdat > 18) {
+            mAdapter.setOnItemClickListener(new OfertAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
 
+                    PayCardDialogFragment dialogFragment = new PayCardDialogFragment();
+                    dialogFragment.show(getFragmentManager(), "ofertPayment");
+
+                    if(dialogAnswer.equals("OK")) {
+                        /*String documentId = documentSnapshot.getId();
+                        Log.d("ofertaID", documentId);
+                        updateUserOfert(documentId, documentSnapshot);*/
+                        Toast.makeText(getContext(), "OK", Toast.LENGTH_SHORT).show();
+                    }else{
+                        //Toast.makeText(getContext(), dialogAnswer, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        //}
     }
 
     private void updateUserOfert(final String documentId, DocumentSnapshot documentSnapshot) {

@@ -16,4 +16,15 @@
     <string name="longitude_label">Longitude</string>
 
     <string name="tancar_sessio"><u>TANCA LA SESSIÓ</u></string>
+
+    <string name="card_header">CVV</string>
+    <string name="card_number_sample">XXXX XXXX XXXX XXXX</string>
+    <string name="card_validity_label">CADUCA FINAL➤</string>
+    <string name="card_validity_sample">MM/YY</string>
+    <string name="card_name_sample">NOM TITULAR</string>
+
+    <string name="card_holders_name">Nom Titular Tarjeta</string>
+    <string name="card_number">Numero Tarjeta</string>
+    <string name="card_validity">Caducitat</string>
+    <string name="card_cvv">Numero Secret / CVV</string>
 </resources>

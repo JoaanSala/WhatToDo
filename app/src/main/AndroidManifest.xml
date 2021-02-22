@@ -23,6 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".PayCardDialogFragment"/>
         <activity android:name=".CreditCardFragment"/>
         <activity android:name=".ItemEvent_Activity" />
         <activity android:name=".HomeFragment" />
@@ -43,12 +44,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".SignInFragment" />
         <activity android:name=".LogInFragment" />
         <activity android:name=".LoadingFragment" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".ActivityComent" />
         <activity android:name=".ActivityCreditCard"/>
+        <activity android:name=".CC_ItemCreditCardActivity"
+
+            android:windowSoftInputMode="adjustResize"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

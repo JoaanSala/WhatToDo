@@ -150,24 +150,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                             Log.d("TAG", "onSuccess : user Profile is created for "+userID);
                                         }
                                     });
-                                    fStore.collection("PaidOferts")
-                                            .get()
-                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                    /*if(task.isSuccessful()){
-                                                        int count = 0;
-                                                        for(QueryDocumentSnapshot document : task.getResult()){
-                                                            Log.d("Copyin documents", document.getId() + " => " + document.getData());
-                                                            addOferts(document.toObject(Ofert.class));
-                                                            count++;
-                                                        }
-                                                        Log.d("How many Oferts", String.valueOf(count));
-
-                                                    }*/
-                                                }
-                                            });
-
 
                                     getFragmentManager().beginTransaction().replace(R.id.fragment_main,
                                             new LogInFragment()).commit();

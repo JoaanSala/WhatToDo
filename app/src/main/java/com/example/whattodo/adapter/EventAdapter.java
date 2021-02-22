@@ -39,8 +39,8 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.E
         public EventHolder (View itemView, final OnItemClickListener listener){
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageView);
-            mTextView1 = itemView.findViewById(R.id.textView1);
-            mTextView2 = itemView.findViewById(R.id.textView2);
+            mTextView1 = itemView.findViewById(R.id.textCardNumber);
+            mTextView2 = itemView.findViewById(R.id.textValidateDate);
             mTextView3 = itemView.findViewById(R.id.textView3);
             mTextView4 = itemView.findViewById(R.id.textView4);
 
@@ -83,6 +83,5 @@ public class EventAdapter extends FirestoreRecyclerAdapter<Event, EventAdapter.E
         else if(color<7 && color>=6){eventHolder.mTextView4.setTextColor(Color.parseColor("#FFCE1C"));}      //yellow
         else if(color<6 && color>=5){eventHolder.mTextView4.setTextColor(Color.parseColor("#FF8F19"));}      //orange
         else if(color<5){eventHolder.mTextView4.setTextColor(Color.parseColor("#F13123"));}                  //red
-
     }
 }

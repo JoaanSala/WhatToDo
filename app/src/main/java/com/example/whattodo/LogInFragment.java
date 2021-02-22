@@ -54,9 +54,6 @@ public class LogInFragment extends Fragment implements View.OnClickListener{
         loading_LogIn = mView.findViewById(R.id.loading_logIn);
         btn_signIn = mView.findViewById(R.id.btn_signIn);
 
-        ImageView pref_login = mView.findViewById(R.id.pref_login);
-        pref_login.setOnClickListener(this);
-
         tv_forgotPwd = mView.findViewById(R.id.forgotPwd);
         et_email = mView.findViewById(R.id.log_correo);
         et_contrasenya = mView.findViewById(R.id.log_contrasenya);
@@ -162,10 +159,6 @@ public class LogInFragment extends Fragment implements View.OnClickListener{
                 selectedFragment = new SignInFragment();
                 getFragmentManager().beginTransaction().replace(R.id.fragment_main,
                         selectedFragment).commit();
-                break;
-
-            case R.id.pref_login:
-                startActivity(new Intent(getActivity(), PreferencesActivity.class));
                 break;
         }
     }

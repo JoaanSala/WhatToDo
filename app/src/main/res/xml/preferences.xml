@@ -21,7 +21,8 @@
 
     <PreferenceCategory android:title="Dades de Pagament">
         <Preference android:key="creditcard"
-            android:title="Tarjeta de Credit">
+            android:title="Targeta de Credit"
+            android:icon="@drawable/credit_card">
             <intent android:action="android.intent.action.VIEW"
                 android:targetPackage="com.example.whattodo"
                 android:targetClass="com.example.whattodo.ActivityCreditCard"/>
