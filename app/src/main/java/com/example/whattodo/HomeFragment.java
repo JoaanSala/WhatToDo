@@ -9,34 +9,23 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.whattodo.preferences.PreferencesFragment;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -51,15 +40,23 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-
-import org.w3c.dom.Text;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.Normalizer;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
@@ -95,6 +92,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     double latitude, longitude;
     MainActivity ma;
 
+    FirebaseAuth mAuth;
+    FirebaseFirestore mStore;
+    String userID;
+    DocumentReference documentReference;
+
 
     @Nullable
     @Override
@@ -102,6 +104,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mView = inflater.inflate(R.layout.fragment_home, container, false);
 
         ma = (MainActivity)getActivity();
+
+        mAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
+        userID = mAuth.getCurrentUser().getUid();
+        initLocationUser();
 
         restaurants = mView.findViewById(R.id.cardivew_r);
         monuments = mView.findViewById(R.id.cardivew_m);
@@ -117,7 +124,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mLatitudeLabel = getResources().getString(R.string.latitude_label);
         mLongitudeLabel = getResources().getString(R.string.longitude_label);
 
-        city_location.setText("-");
         getLocation = mView.findViewById(R.id.search_location);
 
         getLocation.setOnClickListener(this);
@@ -135,6 +141,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         buildLocationSettingsRequest();
 
         return mView;
+    }
+
+    public void initLocationUser(){
+        documentReference = mStore.collection("users").document(userID);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentReference != null) {
+                    if(!snapshot.getString("currentLocation").toString().equals("-")) {
+                        city_location.setText(snapshot.get("currentLocation").toString());
+                        ma.setLocation(snapshot.get("currentLocation").toString());
+                        ma.setLocationActivated(true);
+                    }
+                }
+            }
+        });
     }
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -172,6 +194,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
         if(ma.getLocationActivated() && !city_location.getText().equals(ma.getLocation())){
             city_location.setText(ma.getLocation());
+
         }
 
     }
@@ -393,9 +416,39 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if(!string.equals(ma.getLocation())){
             city_location.setText(string);
             ma.setLocation(string);
+            actualizarInfoUser();
             ma.sendOnMainChannel(mView);
         }
         stopLocationUpdates();
     }
 
+    public void actualizarInfoUser(){
+        //First we have to subscribe and unsubscribe from Topics
+        if(!city_location.getText().toString().equals("-")) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(city_location.getText().toString());
+        }
+        checkUserInfo();
+
+        String currentLocation = ma.getLocation();
+        Map<String, Object> user = new HashMap<>();
+        user.put("currentLocation", currentLocation);
+        documentReference.set(user, SetOptions.merge());
+        FirebaseMessaging.getInstance().subscribeToTopic(ma.getLocation());
+
+        checkUserInfo();
+    }
+
+    public void checkUserInfo(){
+        final DocumentReference document = mStore.collection("users").document(userID);
+        Log.d("HELLO", "HELLO DARLING!");
+
+        document.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                Log.d("USER-NAME", value.getString("name") +" "+ value.getString("surname"));
+                Log.d("USER-CURRENT_LOCATION", value.getString("currentLocation"));
+
+            }
+        });
+    }
 }

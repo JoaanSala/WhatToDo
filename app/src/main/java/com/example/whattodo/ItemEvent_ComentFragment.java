@@ -17,7 +17,6 @@ import com.example.whattodo.adapter.EventAdapter;
 import com.example.whattodo.model.Coment;
 import com.example.whattodo.model.Event;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.auto.value.AutoAnnotation;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.firebase.iid.FirebaseInstanceId
 
 class LoadingFragment : Fragment() {
     private val mHandler = Handler()
@@ -17,7 +18,17 @@ class LoadingFragment : Fragment() {
                 fragmentManager!!.beginTransaction().replace(R.id.fragment_main, LogInFragment()).commit()
             }
         }, TIME_OUT.toLong()) // 3,5 seconds
+
+        notification();
         return mView
+    }
+
+    private fun notification(){
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+            it.result?.token?.let {
+                println("Este es el TOKEN del dispositivo: ${it}")
+            }
+        }
     }
 
     private open inner class Runanble : Runnable {

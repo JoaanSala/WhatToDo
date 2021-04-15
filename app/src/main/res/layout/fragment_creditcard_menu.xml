@@ -91,7 +91,7 @@
             android:background="#000000"
             android:text="ELIMINAR"
             android:layout_marginLeft="10dp"
-            android:textColor="@android:color/secondary_text_light_nodisable"/>
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 

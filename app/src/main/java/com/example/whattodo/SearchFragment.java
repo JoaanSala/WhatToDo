@@ -66,7 +66,6 @@ public class SearchFragment extends Fragment{
     }
 
     private void initRecyclerView() {
-        Log.d("initRecyclerView", "I'm here");
         mOptions = new FirestoreRecyclerOptions.Builder<Event>().setQuery(eventRef, Event.class).build();
 
         mAdapter = new EventAdapter(mOptions);

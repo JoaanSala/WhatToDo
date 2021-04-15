@@ -12,15 +12,18 @@ class Ofert {
     var validesa: String? = null
         private set
     var adquirit = false
+    var price: String? = null
+        private set
 
     constructor() {}
-    constructor(photo: String?, title: String?, event: String?, localitzacio: String?, validesa: String?, adquirit: Boolean) {
+    constructor(photo: String?, title: String?, event: String?, localitzacio: String?, validesa: String?, adquirit: Boolean, price: String?) {
         this.photo = photo
         this.title = title
         this.event = event
         this.localitzacio = localitzacio
         this.validesa = validesa
         this.adquirit = adquirit
+        this.price = price
     }
 
 }

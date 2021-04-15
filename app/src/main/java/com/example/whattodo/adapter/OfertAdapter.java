@@ -1,6 +1,5 @@
 package com.example.whattodo.adapter;
 
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.whattodo.PayCardDialogFragment;
 import com.example.whattodo.R;
 import com.example.whattodo.model.Ofert;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -30,8 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-
-
 
 public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.OfertHolder> {
     private OfertAdapter.OnItemClickListener mListener;
@@ -67,10 +63,7 @@ public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.O
             bt_getOfert.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     int position = getAdapterPosition();
-                    bt_getOfert.setVisibility(View.GONE);
-                    ofertaAdquired.setVisibility(View.VISIBLE);
                     if(position != RecyclerView.NO_POSITION && mListener != null){
                         mListener.onItemClick(getSnapshots().getSnapshot(position), position);
                     }
@@ -116,6 +109,12 @@ public class OfertAdapter extends FirestoreRecyclerAdapter<Ofert, OfertAdapter.O
         ofertHolder.eventANDlocation.setText(ofert.getEvent()+", "+ ofert.getLocalitzacio());
         ofertHolder.title.setText(ofert.getTitle());
         ofertHolder.caducitat.setText("Oferta Vàlida fins "+ofert.getValidesa());
+        if(ofert.getPrice().equals("0,00")){
+            ofertHolder.bt_getOfert.setText("ADQUIRIR GRATIS");
+        }else{
+            ofertHolder.bt_getOfert.setText("€ "+ofert.getPrice());
+            ofertHolder.bt_getOfert.setTextSize(25);
+        }
 
         String getDate = ofert.getValidesa()+"/2020";
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");

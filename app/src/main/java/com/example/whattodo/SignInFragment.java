@@ -144,6 +144,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                                     user.put("email", email);
                                     user.put("city", city);
                                     user.put("birthDate", birthDate);
+                                    user.put("currentLocation", "-");
                                     userReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
