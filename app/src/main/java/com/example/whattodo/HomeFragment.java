@@ -148,7 +148,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if (documentReference != null) {
+                if (documentReference != null && snapshot != null) {
                     if(!snapshot.getString("currentLocation").toString().equals("-")) {
                         city_location.setText(snapshot.get("currentLocation").toString());
                         ma.setLocation(snapshot.get("currentLocation").toString());
@@ -201,28 +201,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        Fragment selectedFragment = null;
         Bundle bundle = new Bundle();
         switch (view.getId()){
             case R.id.cardivew_r:
                 String Restaurants = "Restaurants";
                 bundle.putString("Type_Event", Restaurants);
-                goEventFragment(selectedFragment, bundle);
+                goEventFragment(bundle);
                 break;
             case R.id.cardivew_m:
                 String Monuments = "Llocs d'Interès";
                 bundle.putString("Type_Event", Monuments);
-                goEventFragment(selectedFragment, bundle);
+                goEventFragment(bundle);
                 break;
             case R.id.cardivew_o:
                 String Oci = "Oci";
                 bundle.putString("Type_Event", Oci);
-                goEventFragment(selectedFragment, bundle);
+                goEventFragment(bundle);
                 break;
             case R.id.cardivew_n:
                 String Nocturn = "Nocturn";
                 bundle.putString("Type_Event", Nocturn);
-                goEventFragment(selectedFragment, bundle);
+                goEventFragment(bundle);
                 break;
 
             case R.id.search_location:
@@ -237,8 +236,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
 
-    public void goEventFragment(Fragment selectedFragment, Bundle bundle){
-        selectedFragment = new EventFragment();
+    public void goEventFragment(Bundle bundle){
+        Fragment selectedFragment = new EventFragment();
         selectedFragment.setArguments(bundle);
         getFragmentManager().beginTransaction().replace(R.id.fragment_main, selectedFragment).commit();
     }

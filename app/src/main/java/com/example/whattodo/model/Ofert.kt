@@ -26,4 +26,5 @@ class Ofert {
         this.price = price
     }
 
+
 }

@@ -25,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".OfertActivityPay"/>
         <activity android:name=".OfertFragmentPay"/>
         <activity android:name=".PayCardFragment_Complete"/>
         <activity android:name=".PayCardFragment" />

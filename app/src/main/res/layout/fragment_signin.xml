@@ -83,7 +83,7 @@
             android:paddingBottom="10dp"
             android:textColorHint="#737070"/>
         <TextView
-            android:id="@+id/et_dataNaixement"
+            android:id="@+id/tv_dataNaixement"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:hint="Data Naixement"
