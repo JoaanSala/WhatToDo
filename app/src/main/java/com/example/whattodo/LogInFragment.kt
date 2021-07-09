@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -22,12 +23,16 @@ class LogInFragment : Fragment(), View.OnClickListener {
     private val user: FirebaseUser? = null
     var loading_LogIn: RelativeLayout? = null
 
+    private lateinit var bottomNav: BottomNavigationView
+
     private lateinit var viewOfLayout: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewOfLayout = inflater!!.inflate(R.layout.fragment_login, container, false)
 
-        requireActivity().findViewById<View>(R.id.bottom_navigation).visibility = View.GONE
+        bottomNav = requireActivity().findViewById(R.id.bottom_navigation)
+
+        bottomNav.visibility = View.GONE
 
         mAuth = FirebaseAuth.getInstance()
         loading_LogIn = viewOfLayout.findViewById(R.id.loading_logIn)
@@ -64,7 +69,9 @@ class LogInFragment : Fragment(), View.OnClickListener {
                             //Comprovem si el compte està verificat
                             if (mAuth!!.currentUser!!.isEmailVerified) {
                                 Toast.makeText(activity, "SESSIÓ INICIADA!", Toast.LENGTH_SHORT).show()
-                                requireActivity().findViewById<View>(R.id.bottom_navigation).visibility = View.VISIBLE
+                                bottomNav.visibility = View.VISIBLE
+                                bottomNav.menu.findItem(R.id.nav_home).setChecked(true)
+
                                 requireFragmentManager().beginTransaction().replace(R.id.fragment_main,
                                         HomeFragment()).commit()
                             } else {
