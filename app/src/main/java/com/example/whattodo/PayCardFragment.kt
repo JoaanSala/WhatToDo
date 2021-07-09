@@ -32,14 +32,15 @@ class PayCardFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewOfLayout = inflater.inflate(R.layout.fragment_paycard, container, false)
+
         mRecyclerView = viewOfLayout.findViewById(R.id.dialog_rv)
         noCreditCards = viewOfLayout.findViewById(R.id.noCreditCard_payied)
 
         mFirestore = FirebaseFirestore.getInstance()
-        userID = FirebaseAuth.getInstance().currentUser.uid
+        userID = FirebaseAuth.getInstance().currentUser!!.uid
 
         creditCardQuery = mFirestore.collection("users").document(userID!!).collection("CreditCards")
-        //checkDocuments()
+        checkDocuments()
 
         initReciclerView(creditCardQuery)
         return viewOfLayout
@@ -55,7 +56,7 @@ class PayCardFragment : Fragment() {
         mRecyclerView!!.adapter = adapter
     }
 
-    /*
+
     private fun checkDocuments() {
         creditCardQuery!!.get()
                 .addOnCompleteListener { task ->
@@ -64,18 +65,17 @@ class PayCardFragment : Fragment() {
                         for (document in task.result!!) {
                             Log.d("Copyin documents", document.id + " => " + document.data)
                             countNumberCC++
-                            document.data == "cc_cardVV"
                         }
                         Log.d("How many CreditCards", countNumberCC.toString())
                         if (countNumberCC > 0) {
-                            noCreditCards!!.visibility = View.INVISIBLE
+                            noCreditCards.visibility = View.INVISIBLE
                         } else {
-                            noCreditCards!!.visibility = View.VISIBLE
+                            noCreditCards.visibility = View.VISIBLE
                         }
                     }
                 }
     }
-     */
+
 
     override fun onStart() {
         super.onStart()

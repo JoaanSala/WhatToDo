@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     @JvmName("setLocation1")
     fun setLocation(location: String?) {
         this.location = location
-        Log.d("SavedLocation", location)
+        Log.d("SavedLocation", location!!)
     }
 
     @JvmName("getLocation1")

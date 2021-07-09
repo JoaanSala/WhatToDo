@@ -22,24 +22,26 @@ import kotlinx.android.synthetic.main.fragment_signin.*
 import java.util.*
 
 class SignInFragment : Fragment(), View.OnClickListener {
-    private var mBirthDate: TextView? = null
+    private lateinit var mBirthDate: TextView
+
     private var mDateSetListener: OnDateSetListener? = null
-    private var b_backLogin: Button? = null
-    private var b_crearCompte: Button? = null
-    private var mName: EditText? = null
-    private var mSurname: EditText? = null
-    private var mCity: EditText? = null
-    private var mEmail: EditText? = null
-    private var mPwd: EditText? = null
-    var mView: View? = null
-    var mAuth: FirebaseAuth? = null
-    var fStore: FirebaseFirestore? = null
-    var userID: String? = null
-    var userReference: DocumentReference? = null
+
+    private lateinit var b_backLogin: Button
+    private lateinit var b_crearCompte: Button
+
+    private lateinit var mName: EditText
+    private lateinit var mSurname: EditText
+    private lateinit var mCity: EditText
+    private lateinit var mEmail: EditText
+    private lateinit var mPwd: EditText
 
     private lateinit var viewOfLayout: View
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var fStore: FirebaseFirestore
+    private lateinit var userID: String
+    private lateinit var userReference: DocumentReference
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? {
         viewOfLayout = inflater.inflate(R.layout.fragment_signin, container, false)
 
         mName = viewOfLayout.findViewById(R.id.et_nom)
@@ -47,6 +49,8 @@ class SignInFragment : Fragment(), View.OnClickListener {
         mCity = viewOfLayout.findViewById(R.id.et_ciutat)
         mEmail = viewOfLayout.findViewById(R.id.et_correu)
         mPwd = viewOfLayout.findViewById(R.id.et_contrasenya)
+        mBirthDate = viewOfLayout.findViewById(R.id.tv_dataNaixement)
+
         mAuth = FirebaseAuth.getInstance()
 
         fStore = FirebaseFirestore.getInstance()
@@ -76,67 +80,77 @@ class SignInFragment : Fragment(), View.OnClickListener {
                 val month = cal[Calendar.MONTH]
                 val day = cal[Calendar.DAY_OF_MONTH]
                 val dialog = DatePickerDialog(
-                        context!!,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mDateSetListener,
-                        year, month, day)
+                    requireContext(),
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    mDateSetListener,
+                    year, month, day
+                )
                 dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 dialog.show()
             }
-            R.id.btn_backLogin -> fragmentManager!!.beginTransaction().replace(R.id.fragment_main,
-                    LogInFragment()).commit()
+            R.id.btn_backLogin -> requireFragmentManager().beginTransaction().replace(
+                R.id.fragment_main,
+                LogInFragment()
+            ).commit()
             R.id.btn_crear_compte -> {
-                val email = mEmail!!.text.toString().trim { it <= ' ' }
-                val password = mPwd!!.text.toString().trim { it <= ' ' }
-                val name = mName!!.text.toString().trim { it <= ' ' }
-                val surname = mSurname!!.text.toString().trim { it <= ' ' }
-                val city = mCity!!.text.toString().trim { it <= ' ' }
-                val birthDate = mBirthDate!!.text.toString().trim { it <= ' ' }
+                val email = mEmail.text.toString().trim { it <= ' ' }
+                val password = mPwd.text.toString().trim { it <= ' ' }
+                val name = mName.text.toString().trim { it <= ' ' }
+                val surname = mSurname.text.toString().trim { it <= ' ' }
+                val city = mCity.text.toString().trim { it <= ' ' }
+                val birthDate = mBirthDate.text.toString().trim { it <= ' ' }
+
                 if (TextUtils.isEmpty(email)) {
-                    mEmail!!.error = "Email is Required"
+                    mEmail.error = "EMAIL NECESSARI"
                 } else if (TextUtils.isEmpty(password)) {
-                    mPwd!!.error = "Password is required"
+                    mPwd.error = "FA FALTA CONTRASSENYA"
                 } else if (password.length < 6) {
-                    mPwd!!.error = "Password must ne >= 6 Characters"
+                    mPwd.error = "CONTRASENYA MASSA CURTA... MÍNIM 6 CARÀCTERS!"
                 } else {
-                    if (mAuth!!.currentUser != null) {
-                        Toast.makeText(activity, "This Email is allready registered", Toast.LENGTH_SHORT).show()
+                    if (mAuth.currentUser == null) {
+                        Log.d("CurrentUsers: ", mAuth.currentUser!!.displayName!!)
+                        Toast.makeText(
+                            activity,
+                            "AQUEST EMAIL JA ESTA REGISTRAT",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        mAuth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Toast.makeText(activity, "User Created.", Toast.LENGTH_SHORT).show()
-                                userID = mAuth!!.currentUser.uid
-                                userReference = fStore!!.collection("users").document(userID!!)
-                                val user: MutableMap<String, Any> = HashMap()
-                                user["name"] = name
-                                user["surname"] = surname
-                                user["email"] = email
-                                user["city"] = city
-                                user["birthDate"] = birthDate
-                                user["currentLocation"] = "-"
-                                userReference!!.set(user).addOnSuccessListener { Log.d("TAG", "onSuccess : user Profile is created for $userID") }
-                                fragmentManager!!.beginTransaction().replace(R.id.fragment_main,
-                                        LogInFragment()).commit()
-                            } else {
-                                Toast.makeText(context, "Error ! " + task.exception!!.message, Toast.LENGTH_SHORT).show()
+                        mAuth!!.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(activity, "USUARI CREAT!.", Toast.LENGTH_SHORT)
+                                        .show()
+                                    userID = mAuth!!.currentUser!!.uid
+                                    userReference = fStore!!.collection("users").document(userID!!)
+                                    val user: MutableMap<String, Any> = HashMap()
+                                    user["name"] = name
+                                    user["surname"] = surname
+                                    user["email"] = email
+                                    user["city"] = city
+                                    user["birthDate"] = birthDate
+                                    user["currentLocation"] = "-"
+                                    userReference!!.set(user).addOnSuccessListener {
+                                        Log.d(
+                                            "TAG",
+                                            "onSuccess : user Profile is created for $userID"
+                                        )
+                                    }
+                                    requireFragmentManager().beginTransaction().replace(
+                                        R.id.fragment_main,
+                                        LogInFragment()
+                                    ).commit()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Error ! " + task.exception!!.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        }
                     }
                 }
             }
         }
-    } /*private Task<Void> addOferts(final Ofert ofert) {
-
-        final DocumentReference ofertRef = userReference.collection("userOferts").document();
-
-        return fStore.runTransaction(new Transaction.Function<Void>() {
-            @Nullable
-            @Override
-            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                    transaction.set(ofertRef, ofert);
-                return null;
-            }
-        });
-
-    }*/
+    }
 }
+

@@ -42,7 +42,7 @@ class EventFragment : Fragment(), EventAdapter.OnItemClickListener {
         initRecyclerView()
 
         val back = viewOfLayout.findViewById<ImageView>(R.id.arrow_back)
-        back.setOnClickListener { fragmentManager!!.beginTransaction().replace(R.id.fragment_main, HomeFragment()).commit() }
+        back.setOnClickListener { requireFragmentManager().beginTransaction().replace(R.id.fragment_main, HomeFragment()).commit() }
 
         return viewOfLayout
     }
@@ -71,7 +71,6 @@ class EventFragment : Fragment(), EventAdapter.OnItemClickListener {
 
     override fun onItemClick(documentSnapshot: DocumentSnapshot?, position: Int) {
         val documentId = documentSnapshot?.id
-        Log.d("Document-snapshot", documentId)
         val intent = Intent(context, ItemEvent_Activity::class.java)
         intent.putExtra("DOCUMENT_KEY", documentId)
         startActivity(intent)

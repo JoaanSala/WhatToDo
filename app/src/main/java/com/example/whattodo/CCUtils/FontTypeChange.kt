@@ -3,7 +3,7 @@ package com.example.whattodo.CCUtils
 import android.content.Context
 import android.graphics.Typeface
 
-class FontTypeChange     // TODO Auto-generated constructor stub
+class FontTypeChange
 (private val c: Context?) {
     fun get_fontface(n: Int): Typeface {
         val tf: Typeface

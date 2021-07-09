@@ -44,7 +44,7 @@ class OfertAdapter(private val options: FirestoreRecyclerOptions<Ofert>, private
                     .load(ofert.photo)
                     .into(imageOfert)
 
-            val userID = FirebaseAuth.getInstance().currentUser.uid
+            val userID = FirebaseAuth.getInstance().currentUser!!.uid
             val ofertDocument = FirebaseFirestore.getInstance().collection("users").document(userID).collection("PaidOferts").document(snapshots.getSnapshot(position).id)
             ofertDocument.addSnapshotListener { snapshot, e ->
                 if (snapshot!!.getBoolean("acquired") != null) {
@@ -84,9 +84,10 @@ class OfertAdapter(private val options: FirestoreRecyclerOptions<Ofert>, private
         ofertHolder.caducitat.text = "Oferta Vàlida fins " + ofert.validesa
         if (ofert.price == "0,00") {
             ofertHolder.bt_getOfert.text = "ADQUIRIR GRATIS"
+            ofertHolder.bt_getOfert.textSize = 20f
         } else {
-            ofertHolder.bt_getOfert.text = "€ " + ofert.price
-            ofertHolder.bt_getOfert.textSize = 25f
+            ofertHolder.bt_getOfert.text = " ADQUIRIR"+'\n' +"€ " + ofert.price
+            ofertHolder.bt_getOfert.textSize = 21f
         }
         val getDate = ofert.validesa + "/2020"
         val sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy")

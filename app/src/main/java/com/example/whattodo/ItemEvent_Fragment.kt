@@ -39,7 +39,7 @@ class ItemEvent_Fragment : Fragment(), View.OnClickListener {
         image_background = viewOfLayout.findViewById(R.id.image_eventItem)
         tv_title_event = viewOfLayout.findViewById(R.id.title_event)
         tv_localitzacio = viewOfLayout.findViewById(R.id.localitzacio)
-        val documentID = activity!!.intent.extras!!.getString("DOCUMENT_KEY")
+        val documentID = requireActivity().intent.extras!!.getString("DOCUMENT_KEY")
         eventItem = mFirestore!!.collection("entryObject_DB").document(documentID!!)
         eventItem!!.get().addOnSuccessListener { documentSnapshot ->
             event = documentSnapshot.toObject(Event::class.java)
@@ -65,20 +65,20 @@ class ItemEvent_Fragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.close_activity -> activity!!.onBackPressed()
+            R.id.close_activity -> requireActivity().onBackPressed()
             R.id.b_info -> {
                 b_comentari.setBackgroundResource(R.drawable.btn_fragment_u)
                 b_comentari.setTextColor(Color.BLACK)
                 b_info.setBackgroundResource(R.drawable.btn_fragment_c)
                 b_info.setTextColor(Color.WHITE)
-                fragmentManager!!.beginTransaction().replace(R.id.fragment_event, ItemEvent_InfoFragment()).commit()
+                requireFragmentManager().beginTransaction().replace(R.id.fragment_event, ItemEvent_InfoFragment()).commit()
             }
             R.id.b_comentari -> {
                 b_comentari.setBackgroundResource(R.drawable.btn_fragment_c)
                 b_comentari.setTextColor(Color.WHITE)
                 b_info.setBackgroundResource(R.drawable.btn_fragment_u)
                 b_info.setTextColor(Color.BLACK)
-                transaction = fragmentManager!!.beginTransaction()
+                transaction = requireFragmentManager().beginTransaction()
                 transaction!!.replace(R.id.fragment_event, ItemEvent_ComentFragment(), "")
                 transaction!!.commit()
             }

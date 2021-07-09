@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class OfertFragment : Fragment(), OfertAdapter.OnItemClickListener {
     private lateinit var viewOfLayout: View
+
     private lateinit var text_NOLocation: TextView
     private lateinit var recyclerView_Ofert: RecyclerView
     private lateinit var mOptions: FirestoreRecyclerOptions<Ofert>
@@ -38,7 +39,7 @@ class OfertFragment : Fragment(), OfertAdapter.OnItemClickListener {
         ma = activity as MainActivity
         val locationIsActive = ma.locationActivated
         mAuth = FirebaseAuth.getInstance()
-        userID = mAuth.currentUser.uid
+        userID = mAuth.currentUser!!.uid
         mFirestore = FirebaseFirestore.getInstance()
         ofertRef = mFirestore.collection("oferts")
 
@@ -46,7 +47,7 @@ class OfertFragment : Fragment(), OfertAdapter.OnItemClickListener {
         text_NOLocation = viewOfLayout.findViewById(R.id.text_NOLocation)
 
         if (locationIsActive) {
-            Log.d("LOCATION-OFERT", ma!!.location)
+            Log.d("LOCATION-OFERT", ma!!.location!!)
             recyclerView_Ofert.setVisibility(View.VISIBLE)
             text_NOLocation.setVisibility(View.GONE)
             initRecyclerView()
@@ -76,12 +77,12 @@ class OfertFragment : Fragment(), OfertAdapter.OnItemClickListener {
         intent.putExtra("title", documentSnapshot!!["title"].toString())
         intent.putExtra("event", documentSnapshot["event"].toString())
         intent.putExtra("localitzacio", documentSnapshot["localitzacio"].toString())
-        intent.putExtra("price", documentSnapshot["price"]!!.toString())
+        intent.putExtra("price", documentSnapshot["price"].toString())
 
         startActivity(intent)
     }
 
-    /*
+
     private fun checkDocuments() {
         ofertRef!!.whereEqualTo("localitzacio", ma!!.location)
                 .get()
@@ -101,7 +102,7 @@ class OfertFragment : Fragment(), OfertAdapter.OnItemClickListener {
                     }
                 }
     }
-    */
+
 
     override fun onStart() {
         super.onStart()

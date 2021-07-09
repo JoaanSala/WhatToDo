@@ -48,7 +48,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance()
         mStore = FirebaseFirestore.getInstance()
-        userID = mAuth!!.currentUser.uid
+        userID = mAuth!!.currentUser!!.uid
 
         val logout = viewOfLayout.findViewById<Button>(R.id.butt_logout)
         logout.setOnClickListener(this)
@@ -83,7 +83,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             R.id.butt_logout -> {
                 mAuth = FirebaseAuth.getInstance()
                 mAuth!!.signOut()
-                startActivity(Intent(activity, MainActivity::class.java))
+                requireFragmentManager().beginTransaction().replace(R.id.fragment_main,LogInFragment()).commit()
             }
         }
     }

@@ -65,7 +65,7 @@ class CC_ItemCreditCardActivity : FragmentActivity(),  OnBackStackChangedListene
         encryptDecrypt = EncryptDecrypt()
         mAuth = FirebaseAuth.getInstance()
         mStore = FirebaseFirestore.getInstance()
-        userID = mAuth.currentUser.uid
+        userID = mAuth.currentUser!!.uid
         btnNext = findViewById(R.id.btnNext)
         cardFrontFragment = CC_CardFrontFragment()
         cardBackFragment = CC_CardBackFragment()

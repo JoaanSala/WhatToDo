@@ -1,9 +1,11 @@
 package com.example.whattodo
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +24,8 @@ class ItemEvent_ComentFragment : Fragment() {
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var eventRef: DocumentReference
 
+    private lateinit var b_afegircoment: Button
+
     var documentID: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,10 +34,17 @@ class ItemEvent_ComentFragment : Fragment() {
         mRecyclerView = viewOfLayout.findViewById(R.id.coment_recycler_view)
         mFirestore = FirebaseFirestore.getInstance()
 
-        documentID = activity!!.intent.extras!!.getString("DOCUMENT_KEY")
+        documentID = requireActivity().intent.extras!!.getString("DOCUMENT_KEY")
 
         eventRef = mFirestore.collection("entryObject_DB").document(documentID!!)
         val query = eventRef.collection("coment").limit(10)
+
+        b_afegircoment = viewOfLayout.findViewById(R.id.b_comentari)
+        b_afegircoment.setOnClickListener(View.OnClickListener {
+            val intent = Intent(context, ActivityComent::class.java)
+            intent.putExtra("DOCUMENT_KEY", documentID)
+            startActivity(intent)
+        })
 
         initRecyclerView(query)
         return viewOfLayout

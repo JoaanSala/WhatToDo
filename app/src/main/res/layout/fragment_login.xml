@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="¿Encara no en formes part?"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textColor="#000000"
                 />
 
@@ -159,7 +159,7 @@
                 android:background="@android:color/transparent"
                 android:text="@string/Registrar"
                 android:textColor="#000000"
-                android:textSize="17dp"
+                android:textSize="20dp"
                 android:textStyle="bold" />
 
         </LinearLayout>

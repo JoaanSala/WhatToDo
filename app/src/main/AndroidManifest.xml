@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.whattodo">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -17,7 +20,6 @@
 
     <application
         android:networkSecurityConfig="@xml/network_security_config"
-
         android:name=".WhatToDo"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,22 +28,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".OfertActivityPay"/>
-        <activity android:name=".OfertFragmentPay"/>
-        <activity android:name=".PayCardFragment_Complete"/>
-        <activity android:name=".PayCardFragment" />
-        <activity android:name=".CreditCardFragment" />
+        <activity android:name=".OfertFragmentPay"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".PayCardFragment_Complete"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".PayCardFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".CreditCardFragment"
+            tools:ignore="Instantiatable" />
         <activity android:name=".ItemEvent_Activity" />
-        <activity android:name=".HomeFragment" />
-        <activity android:name=".ComentFragment" />
+        <activity android:name=".HomeFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".ComentFragment"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".ItemEvent_Fragment"
-            android:label="@string/title_activity_item_event" />
-        <activity android:name=".EventFragment" />
-        <activity android:name=".ProfileFragment" />
-        <activity android:name=".OfertFragment" />
+            android:label="@string/title_activity_item_event"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".EventFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".ProfileFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".OfertFragment"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".SearchFragment"
-            android:windowSoftInputMode="adjustPan|adjustResize" />
+            android:windowSoftInputMode="adjustPan|adjustResize"
+            tools:ignore="Instantiatable" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,9 +62,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInFragment" />
-        <activity android:name=".LogInFragment" />
-        <activity android:name=".LoadingFragment" />
+        <activity android:name=".SignInFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".LogInFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".LoadingFragment"
+            tools:ignore="Instantiatable" />
         <activity android:name=".preferences.PreferencesActivity" />
         <activity android:name=".ActivityComent" />
         <activity android:name=".ActivityCreditCard" />
@@ -66,7 +82,13 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

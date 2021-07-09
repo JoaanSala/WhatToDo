@@ -44,8 +44,8 @@ class ComentFragment : Fragment(), View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance()
         mStore = FirebaseFirestore.getInstance()
-        userID = mAuth!!.currentUser.uid
-        documentID = activity!!.intent.extras!!.getString("DOCUMENT_KEY")
+        userID = mAuth!!.currentUser!!.uid
+        documentID = requireActivity().intent.extras!!.getString("DOCUMENT_KEY")
         mComentari = viewOfLayout.findViewById(R.id.com_comentari)
         mPublica = viewOfLayout.findViewById(R.id.publica_comentari)
 
@@ -117,9 +117,9 @@ class ComentFragment : Fragment(), View.OnClickListener {
                     val coment = Coment(letter, mComentari!!.text.toString(), estrellaValue)
                     addRating(event, coment)
                 }
-                activity!!.finish()
+                requireActivity().finish()
             }
-            R.id.coment_back_arrow -> activity!!.finish()
+            R.id.coment_back_arrow -> requireActivity().finish()
         }
     }
 

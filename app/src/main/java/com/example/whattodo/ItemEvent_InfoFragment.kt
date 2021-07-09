@@ -22,21 +22,23 @@ class ItemEvent_InfoFragment : Fragment(), OnMapReadyCallback {
     private var google_Map: GoogleMap? = null
     private lateinit var mapView: MapView
     private lateinit var viewOfLayout: View
-    private lateinit var b_afegircoment: Button
-    var tv_telefon: TextView? = null
-    var tv_detalls: TextView? = null
-    var tv_adreça: TextView? = null
-    var mlatitud: Double? = null
-    var mlongitud: Double? = null
-    var titol: String? = null
-    var telefon: String? = null
-    var detalls: String? = null
-    var adreça: String? = null
-    var ciutat: String? = null
-    var event: Event? = null
-    var eventItem: DocumentReference? = null
-    var mFirestore: FirebaseFirestore? = null
-    var documentID: String? = null
+
+    private lateinit var tv_telefon: TextView
+    private lateinit var tv_detalls: TextView
+    private lateinit var tv_adreça: TextView
+    private var mlatitud: Double? = null
+    private var mlongitud: Double? = null
+    private lateinit var titol: String
+    private lateinit var telefon: String
+    private lateinit var detalls: String
+    private lateinit var adreça: String
+    private lateinit var ciutat: String
+    private lateinit var event: Event
+
+    private lateinit var eventItem: DocumentReference
+
+    private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var documentID: String
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -50,18 +52,11 @@ class ItemEvent_InfoFragment : Fragment(), OnMapReadyCallback {
         viewOfLayout = inflater.inflate(R.layout.fragment_eventitem_info, container, false)
         mFirestore = FirebaseFirestore.getInstance()
 
-        documentID = activity!!.intent.extras!!.getString("DOCUMENT_KEY")
+        documentID = requireActivity().intent.getStringExtra("DOCUMENT_KEY")!!
         eventItem = mFirestore!!.collection("entryObject_DB").document(documentID!!)
         tv_telefon = viewOfLayout.findViewById(R.id.c_telefon)
         tv_detalls = viewOfLayout.findViewById(R.id.c_detalls)
         tv_adreça = viewOfLayout.findViewById(R.id.c_adreça)
-
-        b_afegircoment = viewOfLayout.findViewById(R.id.b_comentari)
-        b_afegircoment.setOnClickListener(View.OnClickListener {
-            val intent = Intent(context, ActivityComent::class.java)
-            intent.putExtra("DOCUMENT_KEY", documentID)
-            startActivity(intent)
-        })
 
         return viewOfLayout
     }
@@ -71,18 +66,18 @@ class ItemEvent_InfoFragment : Fragment(), OnMapReadyCallback {
             google_Map = googleMap
         }
         google_Map!!.mapType = GoogleMap.MAP_TYPE_NORMAL
-        eventItem!!.get().addOnSuccessListener { snapshot ->
-            event = snapshot.toObject(Event::class.java)
-            titol = event!!.Titol
-            telefon = event!!.Telefon
-            detalls = event!!.Detalls
-            adreça = event!!.Adreça
-            ciutat = event!!.Ciutat
-            tv_telefon!!.text = telefon
-            tv_detalls!!.text = detalls
-            tv_adreça!!.text = "$adreça, $ciutat"
-            mlatitud = event!!.Latitud
-            mlongitud = event!!.Longitud
+        eventItem.get().addOnSuccessListener { snapshot ->
+            event = snapshot.toObject(Event::class.java)!!
+            titol = event.Titol.toString()
+            telefon = event.Telefon.toString()
+            detalls = event.Detalls.toString()
+            adreça = event.Adreça.toString()
+            ciutat = event.Ciutat.toString()
+            tv_telefon.text = telefon
+            tv_detalls.text = detalls
+            tv_adreça.text = "$adreça, $ciutat"
+            mlatitud = event.Latitud!!
+            mlongitud = event.Longitud!!
             val location = LatLng(mlatitud!!, mlongitud!!)
             google_Map!!.addMarker(MarkerOptions().position(location).title(titol))
             google_Map!!.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15.5f))

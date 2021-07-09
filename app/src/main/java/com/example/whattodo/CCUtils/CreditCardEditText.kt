@@ -35,7 +35,6 @@ class CreditCardEditText : AppCompatEditText {
             Log.d("ET", "onKeyPreIme: ")
             if (backButtonListener != null) backButtonListener.onBackClick()
             return true
-            // TODO: Hide your view as you do it in your activity
         }
         return false
     }

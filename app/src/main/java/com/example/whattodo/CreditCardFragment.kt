@@ -39,7 +39,7 @@ class CreditCardFragment : Fragment(), View.OnClickListener {
         val deleteCards = viewOfLayout.findViewById<Button>(R.id.btnDelete)
         noCreditCards = viewOfLayout.findViewById(R.id.noCreditCard)
         mFirestore = FirebaseFirestore.getInstance()
-        userID = FirebaseAuth.getInstance().currentUser.uid
+        userID = FirebaseAuth.getInstance().currentUser!!.uid
         creditCardQuery = mFirestore.collection("users").document(userID!!).collection("CreditCards")
 
         newCard.setOnClickListener(this)
@@ -78,7 +78,6 @@ class CreditCardFragment : Fragment(), View.OnClickListener {
                 while (i < adapter!!.itemCount) {
                     val creditCard = adapter!!.getItem(i)
                     if (creditCard.isSelected == true) {
-                        Log.d("NUM-TARGETA-SELECCIONADA", creditCard.numTargeta)
                         updateCreditCards(adapter!!.snapshots.getSnapshot(i).id, creditCard.numTargeta)
                     }
                     i++

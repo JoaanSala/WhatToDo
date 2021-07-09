@@ -27,6 +27,8 @@ class LogInFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewOfLayout = inflater!!.inflate(R.layout.fragment_login, container, false)
 
+        requireActivity().findViewById<View>(R.id.bottom_navigation).visibility = View.GONE
+
         mAuth = FirebaseAuth.getInstance()
         loading_LogIn = viewOfLayout.findViewById(R.id.loading_logIn)
         et_email = viewOfLayout.findViewById(R.id.log_correo)
@@ -51,27 +53,27 @@ class LogInFragment : Fragment(), View.OnClickListener {
                 val email = et_email!!.text.toString().trim { it <= ' ' }
                 val password = et_contrasenya!!.text.toString().trim { it <= ' ' }
                 if (TextUtils.isEmpty(email)) {
-                    et_email!!.error = "Email is Required"
+                    et_email!!.error = "NO S'HA INTRODUIT CAP EMAIL"
                 } else if (TextUtils.isEmpty(password)) {
-                    et_contrasenya!!.error = "Password is required"
+                    et_contrasenya!!.error = "NO S'HA INTRODUIT CAP CONTRASSENYA"
                 } else {
                     btn_logIn!!.visibility = View.GONE
                     loading_LogIn!!.visibility = View.VISIBLE
                     mAuth!!.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             //Comprovem si el compte està verificat
-                            if (mAuth!!.currentUser.isEmailVerified) {
-                                Toast.makeText(activity, "Logged in Succesfully", Toast.LENGTH_SHORT).show()
-                                activity!!.findViewById<View>(R.id.bottom_navigation).visibility = View.VISIBLE
-                                fragmentManager!!.beginTransaction().replace(R.id.fragment_main,
+                            if (mAuth!!.currentUser!!.isEmailVerified) {
+                                Toast.makeText(activity, "SESSIÓ INICIADA!", Toast.LENGTH_SHORT).show()
+                                requireActivity().findViewById<View>(R.id.bottom_navigation).visibility = View.VISIBLE
+                                requireFragmentManager().beginTransaction().replace(R.id.fragment_main,
                                         HomeFragment()).commit()
                             } else {
                                 //Enviem email de verificació
                                 btn_logIn!!.visibility = View.VISIBLE
                                 loading_LogIn!!.visibility = View.GONE
                                 val fUser = mAuth!!.currentUser
-                                fUser.sendEmailVerification().addOnSuccessListener { Toast.makeText(context, "Verification Email Has Been Sent", Toast.LENGTH_SHORT).show() }.addOnFailureListener { e -> Log.d(ContentValues.TAG, "onFailure : Email not sent " + e.message) }
-                                Toast.makeText(activity, "You have to verified your email first", Toast.LENGTH_SHORT).show()
+                                fUser!!.sendEmailVerification().addOnSuccessListener { Toast.makeText(context, "S'HA ENVIAT EL CORREU DE VERIFICACIÓ", Toast.LENGTH_SHORT).show() }.addOnFailureListener { e -> Log.d(ContentValues.TAG, "onFailure : Email not sent " + e.message) }
+                                Toast.makeText(activity, "HAS DE VERIFICAR L'EMAIL PRIMER!... COMPROVA EL TEU CORREU!", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Toast.makeText(activity, "Error ! " + task.exception!!.message, Toast.LENGTH_SHORT).show()
@@ -85,21 +87,21 @@ class LogInFragment : Fragment(), View.OnClickListener {
                 //Canviar contrasenya
                 val resetMail = EditText(context)
                 val passwordResetDialog = AlertDialog.Builder(context)
-                passwordResetDialog.setTitle("Resset Password ?")
-                passwordResetDialog.setMessage("Enter Your Email To Received Reset Link")
+                passwordResetDialog.setTitle("Recuperar Contrasenya ?")
+                passwordResetDialog.setMessage("Indica el teu correu electrònic")
                 passwordResetDialog.setView(resetMail)
-                passwordResetDialog.setPositiveButton("ACCEPT") { dialogInterface, i -> //extract the email and send reset link
+                passwordResetDialog.setPositiveButton("ACCEPTAR") { dialogInterface, i -> //extract the email and send reset link
                     val mail = resetMail.text.toString()
-                    mAuth!!.sendPasswordResetEmail(mail).addOnSuccessListener { Toast.makeText(activity, "Reset Link Sent To Your Email", Toast.LENGTH_SHORT).show() }.addOnFailureListener { e -> Toast.makeText(activity, "Error ! Reset Link is Not Sent" + e.message, Toast.LENGTH_SHORT).show() }
+                    mAuth!!.sendPasswordResetEmail(mail).addOnSuccessListener { Toast.makeText(activity, "S'HA ENVIAT EL CORREU PER RECUPERAR LA CONTRASENYA!", Toast.LENGTH_SHORT).show() }.addOnFailureListener { e -> Toast.makeText(activity, "Error ! NO S'HA POGUT ENVIAR EL CORREU PER RECUPERAR LA CONTRASENYA... TORNA-HO A PROVAR!" + e.message, Toast.LENGTH_SHORT).show() }
                 }
-                passwordResetDialog.setNegativeButton("CANCEL") { dialogInterface, i ->
+                passwordResetDialog.setNegativeButton("CANCEL·LAR") { dialogInterface, i ->
                     //close the dialog
                 }
                 passwordResetDialog.create().show()
             }
             R.id.btn_signIn -> {
                 selectedFragment = SignInFragment()
-                fragmentManager!!.beginTransaction().replace(R.id.fragment_main,
+                requireFragmentManager().beginTransaction().replace(R.id.fragment_main,
                         selectedFragment).commit()
             }
         }

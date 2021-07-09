@@ -58,10 +58,10 @@ class CC_CardFrontFragment : Fragment() {
 
     fun setCardType(type: Int) {
         when (type) {
-            CreditCardUtils.VISA -> cardType.setImageDrawable(ContextCompat.getDrawable(activity!!, R.drawable.ic_visa))
-            CreditCardUtils.MASTERCARD -> cardType.setImageDrawable(ContextCompat.getDrawable(activity!!, R.drawable.ic_mastercard))
-            CreditCardUtils.AMEX -> cardType.setImageDrawable(ContextCompat.getDrawable(activity!!, R.drawable.ic_amex))
-            CreditCardUtils.DISCOVER -> cardType.setImageDrawable(ContextCompat.getDrawable(activity!!, R.drawable.ic_discover))
+            CreditCardUtils.VISA -> cardType.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_visa))
+            CreditCardUtils.MASTERCARD -> cardType.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_mastercard))
+            CreditCardUtils.AMEX -> cardType.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_amex))
+            CreditCardUtils.DISCOVER -> cardType.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.ic_discover))
             CreditCardUtils.NONE -> cardType.setImageResource(android.R.color.transparent)
         }
     }

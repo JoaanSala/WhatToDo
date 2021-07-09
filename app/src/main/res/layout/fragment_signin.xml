@@ -172,15 +172,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¿Ya tienes cuenta?"
-                android:textSize="16sp"
+                android:text="¿Ja tens un compte?"
+                android:textSize="18sp"
                 android:textColor="#000000"
                 />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/Back_LogIn"
-                android:textSize="17dp"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 android:id="@+id/btn_backLogin"
                 android:background="@android:color/transparent"
